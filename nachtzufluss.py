@@ -30,7 +30,7 @@ def get_value(field_name):
     return None
 
 def write_value(field_name, value):
-    url = f"https://api.datacake.co/v1/devices/{DEVICE_ID}/record/"
+    url = f"https://api.datacake.co/v1/devices/{DEVICE_ID}/record/?batch=true"
     payload = [{"field": field_name, "value": value}]
     r = requests.post(url, json=payload, headers=HEADERS)
     print(r.status_code, r.text)
