@@ -1,0 +1,31 @@
+name: Nachtzufluss Berechnung
+
+on:
+  schedule:
+    - cron: '0 21 * * *'   # 23:00 MEZ (22:00 UTC im Winter, 21:00 UTC im Sommer - siehe Hinweis unten)
+    - cron: '0 3 * * *'    # 05:00 MEZ
+  workflow_dispatch:
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install requests
+      - name: Snapshot um 23 Uhr
+        if: github.event.schedule == '0 22 * * *'
+        env:
+          DATACAKE_TOKEN: ${{ secrets.DATACAKE_TOKEN }}
+          DATACAKE_WORKSPACE_ID: ${{ secrets.DATACAKE_WORKSPACE_ID }}
+          DATACAKE_DEVICE_ID: ${{ secrets.DATACAKE_DEVICE_ID }}
+        run: python nachtzufluss.py snapshot
+      - name: Berechnung um 5 Uhr
+        if: github.event.schedule == '0 4 * * *'
+        env:
+          DATACAKE_TOKEN: ${{ secrets.DATACAKE_TOKEN }}
+          DATACAKE_WORKSPACE_ID: ${{ secrets.DATACAKE_WORKSPACE_ID }}
+          DATACAKE_DEVICE_ID: ${{ secrets.DATACAKE_DEVICE_ID }}
+        run: python nachtzufluss.py calculate
