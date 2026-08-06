@@ -1,0 +1,21 @@
+name: Nachtzufluss Snapshot
+on:
+  schedule:
+    - cron: '0 21 * * *'   # 23:00 MESZ (Sommerzeit)
+  workflow_dispatch:
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: pip install requests
+      - name: Snapshot um 23 Uhr
+        env:
+          DATACAKE_TOKEN: ${{ secrets.DATACAKE_TOKEN }}
+          DATACAKE_WORKSPACE_ID: ${{ secrets.DATACAKE_WORKSPACE_ID }}
+          DATACAKE_DEVICE_ID: ${{ secrets.DATACAKE_DEVICE_ID }}
+        run: python nachtzufluss.py snapshot
