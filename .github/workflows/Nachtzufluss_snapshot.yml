@@ -1,7 +1,5 @@
 name: Nachtzufluss Snapshot
 on:
-  schedule:
-    - cron: '0 21 * * *'   # 23:00 MESZ (Sommerzeit)
   workflow_dispatch:
 
 jobs:
