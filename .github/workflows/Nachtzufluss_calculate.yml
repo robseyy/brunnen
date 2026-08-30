@@ -1,7 +1,5 @@
 name: Nachtzufluss Calculate
 on:
-  schedule:
-    - cron: '0 3 * * *'   # 05:00 MESZ (Sommerzeit)
   workflow_dispatch:
 
 jobs:
